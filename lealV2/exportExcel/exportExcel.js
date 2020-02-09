@@ -14,10 +14,10 @@ app.use(json2xls.middleware);
 
 var pool      =    mysql.createPool({
     connectionLimit : 100, //important
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'misdatos',
+    host     : 'sql10.freemysqlhosting.net',
+    user     : 'sql10322076',
+    password : 'gXNBJjsnwq',
+    database : 'sql10322076',
     debug    :  false
 });
 

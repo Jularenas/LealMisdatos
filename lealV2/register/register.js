@@ -10,10 +10,10 @@ app.use(bodyParser.json());
 
 var pool      =    mysql.createPool({
     connectionLimit : 100, //important
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'misdatos',
+    host     : 'sql10.freemysqlhosting.net',
+    user     : 'sql10322076',
+    password : 'gXNBJjsnwq',
+    database : 'sql10322076',
     debug    :  false
 });
 
@@ -83,7 +83,7 @@ app.post('/register', (req,res)=>{
         if (hour<10){
             hour='0'+hour;
         }
-        today = mm+'-'+dd+'-'+yyyy+' '+hour+':'+minutes+':'+seconds;
+        today = yyyy+'-'+mm+'-'+dd+' '+hour+':'+minutes+':'+seconds;
         var name=req.body.name;
         var last_name=req.body.last_name;
         var birth=req.body.birthday;

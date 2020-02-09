@@ -9,10 +9,10 @@ app.use(bodyParser.json());
 
 var pool      =    mysql.createPool({
     connectionLimit : 100, //important
-    host     : 'localhost',
-    user     : 'root',
-    password : '',
-    database : 'misdatos',
+    host     : 'sql10.freemysqlhosting.net',
+    user     : 'sql10322076',
+    password : 'gXNBJjsnwq',
+    database : 'sql10322076',
     debug    :  false
 });
 
@@ -81,14 +81,14 @@ app.post('/crearTransaccion', (req,res)=>{
     if (hour<10){
         hour='0'+hour;
     }
-    today = mm+'-'+dd+'-'+yyyy+' '+hour+':'+minutes+':'+seconds;
+    today = yyyy+'-'+mm+'-'+dd+' '+hour+':'+minutes+':'+seconds;
 
     var value=req.body.value;
     var points=req.body.points;
     var email=req.body.email;
     let user_id = crypto.createHash('md5').update(email).digest("hex");
 
-    var queryString="INSERT INTO `misdatos`.`transactions` (`transaction_id`, `created_date`, `value`, `points`, `status`, `user_id`) VALUES (null, '"+today+"', "+value+", "+points+", 1, '"+user_id+"');";
+    var queryString="INSERT INTO `transactions` (`transaction_id`, `created_date`, `value`, `points`, `status`, `user_id`) VALUES (null, '"+today+"', "+value+", "+points+", 1, '"+user_id+"');";
 
     req.query=queryString;
     create_transaction_db(req,res);
