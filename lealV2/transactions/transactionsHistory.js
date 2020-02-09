@@ -16,7 +16,8 @@ var pool      =    mysql.createPool({
     debug    :  false
 });
 
-function get_user_database(req,res) {
+
+function get_transactions_db(req,res) {
    
     pool.getConnection(function(err,connection){
         if (err) {
@@ -32,14 +33,7 @@ function get_user_database(req,res) {
         connection.query(req.query,function(err,rows){
             connection.release();
             if(!err) {
-                
-                if(rows[0].user_id!= req.user_id || rows[0].pass!=req.body.password){
-                    res.status(405).json({"code" : 405, "status" : "Incorrect email or password"});
-                    return;
-                }
-                console.log(rows[0].user_id);
-
-                res.status(200).json({"code" : 200, "status" : "succesful login"});
+                res.send(rows);
                 return;
             }          
             else{
@@ -55,29 +49,18 @@ function get_user_database(req,res) {
   });
 }
 
-app.post('/login', (req,res)=>{
-
+app.get('/transatcionsHistory', (req,res)=>{
     var email=req.body.email;
-    var password=req.body.password;
-
-
     let user_id = crypto.createHash('md5').update(email).digest("hex");
 
-    var queryString="Select * from users where user_id='"+user_id+"';"
+    var queryString="Select * from transactions where user_id='"+user_id+"' ORDER BY created_date DESC;";
 
     req.query=queryString;
-
     req.user_id = user_id;
 
-    if (email == undefined || password == undefined){
-        res.json({"code" : 400, "status" : "No email or password specified"});
-        return; 
-    }
+    get_transactions_db(req,res);
 
-    get_user_database(req,res);
-
-    //console.log(res);
 });
 
-console.log(`Login service listening on port ${port}`);
+console.log(`Transaction service listening on port ${port}`);
 app.listen(port);

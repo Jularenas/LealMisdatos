@@ -16,7 +16,10 @@ var pool      =    mysql.createPool({
     debug    :  false
 });
 
-function get_user_database(req,res) {
+
+
+
+function create_transaction_db(req,res) {
    
     pool.getConnection(function(err,connection){
         if (err) {
@@ -32,14 +35,7 @@ function get_user_database(req,res) {
         connection.query(req.query,function(err,rows){
             connection.release();
             if(!err) {
-                
-                if(rows[0].user_id!= req.user_id || rows[0].pass!=req.body.password){
-                    res.status(405).json({"code" : 405, "status" : "Incorrect email or password"});
-                    return;
-                }
-                console.log(rows[0].user_id);
-
-                res.status(200).json({"code" : 200, "status" : "succesful login"});
+                res.json(rows);
                 return;
             }          
             else{
@@ -55,29 +51,50 @@ function get_user_database(req,res) {
   });
 }
 
-app.post('/login', (req,res)=>{
 
+app.post('/crearTransaccion', (req,res)=>{
+
+    var today = new Date();
+    var dd = today.getDate();
+
+    var mm = today.getMonth()+1; 
+    var yyyy = today.getFullYear();
+    if(dd<10) 
+    {
+        dd='0'+dd;
+    } 
+
+    if(mm<10) 
+    {
+        mm='0'+mm;
+    } 
+
+    var seconds = today.getSeconds();
+    var minutes = today.getMinutes();
+    var hour = today.getHours();
+    if (seconds<10){
+        seconds='0'+seconds;
+    }
+    if (minutes<10){
+        minutes='0'+minutes;
+    }
+    if (hour<10){
+        hour='0'+hour;
+    }
+    today = mm+'-'+dd+'-'+yyyy+' '+hour+':'+minutes+':'+seconds;
+
+    var value=req.body.value;
+    var points=req.body.points;
     var email=req.body.email;
-    var password=req.body.password;
-
-
     let user_id = crypto.createHash('md5').update(email).digest("hex");
 
-    var queryString="Select * from users where user_id='"+user_id+"';"
+    var queryString="INSERT INTO `misdatos`.`transactions` (`transaction_id`, `created_date`, `value`, `points`, `status`, `user_id`) VALUES (null, '"+today+"', "+value+", "+points+", 1, '"+user_id+"');";
 
     req.query=queryString;
+    create_transaction_db(req,res);
 
-    req.user_id = user_id;
-
-    if (email == undefined || password == undefined){
-        res.json({"code" : 400, "status" : "No email or password specified"});
-        return; 
-    }
-
-    get_user_database(req,res);
-
-    //console.log(res);
+     
 });
 
-console.log(`Login service listening on port ${port}`);
+console.log(`Transaction service listening on port ${port}`);
 app.listen(port);
