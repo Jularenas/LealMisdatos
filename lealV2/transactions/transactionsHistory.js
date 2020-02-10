@@ -49,7 +49,7 @@ function get_transactions_db(req,res) {
   });
 }
 
-app.get('/transatcionsHistory', (req,res)=>{
+app.get('/transactionsHistory', (req,res)=>{
     var email=req.body.email;
     let user_id = crypto.createHash('md5').update(email).digest("hex");
 
