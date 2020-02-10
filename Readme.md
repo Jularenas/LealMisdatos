@@ -23,7 +23,13 @@
 | Exportar Excel             | /exportExcel          |  {"email":"jularenas2@gmail.com"}exporta el excel de transacciones del usuario con el email dado (descargable con postman, send and download response )                                                                               | GET    |
 
 
+# Comentarios/ mejoras posibles
 
+* cada servicio es ejecutable de forma independiente
+* los servicios no tienen capas, es decir se maneja la logica el servicio y el manejo de ela base de datos desdee el mismo archivo (mala practica, no a proposito, por tiempo)
+* La configuracion de la base de datos esta quemada en el codigo y no importada como un archivo local de configuracion (mala practica, no a proposito). En este caso particular no es grave puesto que es gratuito sin datos crediticios ni nada similar.
+* Los status code de los responses no estan correctamente usados.
+* no se usan tokens de autenticacion, con lo que se podria manejar estados de inicio de sesion y mejorarr la seguridad
 
 
 
